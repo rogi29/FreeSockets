@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)file:///E:/Downloads/index.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Navi concept</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            html, * {
+                padding: 0;
+                margin: 0;
+            }
+
+            body {
+                background: #222;
+                background: url("images/maleficent01.jpg") center no-repeat;
+                background-position: top;
+                opacity: 0.8;
+            }
+
+            header {
+                position: fixed;
+                width: 100%;
+                height: 50px;
+                background: #244782;
+                border-bottom: 1px solid #4d7397;
+                box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.5);
+                z-index: 10;
+                top: 0;
+            }
+
+            .main {
+                margin: 10% auto 0 auto;
+                text-align: center;
+            }
+
+            .main h1 {
+                font-family: arial, sans-serif;
+                color: #ffffff;
+                margin-bottom: 30px;
+            }
+
+            .img {
+                width: 100px;
+                height: 280px;
+                background: #244782;
+                display: inline-block;
+                margin-left: -10px;
+                border: 1px solid #333;
+                box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.5);
+                overflow: hidden;
+            }
+
+            nav {
+                position: fixed;
+                height: 100%;
+                top: 50px;
+            }
+
+            a {
+                text-decoration: none;
+                color: white;
+            }
+
+            .menu {
+                height: 100%;
+                width: 50px;
+                background: rgba(0,0,0,0.2);
+            }
+
+            .menu li {
+                padding-left: 20px;
+                height: 50px;
+                line-height: 50px;
+                display: none;
+            }
+
+            .menu li:hover {
+                background-color: gray;
+            }
+
+            .menu li a {
+                display: block;
+            }
+
+            .menu:hover li {
+                display: block;
+            }
+        </style>
+        <script src="../support/dom4.js">/* DOM4 */</script>
+    </head>
+    <body>
+        <header></header>
+        <nav>
+            <ul class="menu" style="width: 50px;">
+                <li><a href="#">Test</a></li>
+                <li><a href="#">Test</a></li>
+            </ul>
+        </nav>
+        <div class="main">
+            <h1>3 Top Movies</h1>
+            <div class="img closed"><img class="inner" src="http://i567.photobucket.com/albums/ss111/chercabula/Movie%20Stills/2013%20Movies/Man%20of%20Steel/MOS_30SHT_CAPE_INTL_ONLINE_zps54f46da1.jpg~original" alt="banner01" width="550" height="280"></div>
+            <div class="img closed" ><img class="inner" src="http://cdn.collider.com/wp-content/uploads/inception_movie_poster_banner_01.jpg" width="550" height="280"></div>
+            <div class="img opened"><img class="inner" src="http://movies.inquirer.net/files/2014/04/MALEF_DOMESTIC_PH.jpg" alt="banner01" width="550" height="280"></div>
+        </div>
+
+        <script src="../ruddy.js"></script>
+        <script src="../ext/animation.js"></script>
+        <script>
+            var obj = $r('.img'), opened = $r('.opened'), currentEnter;
+            $r('.closed').css('width', '100px');
+            opened.css('width', '550px');
+
+            obj.each(function(){
+                $r(this).mouseEnter(function(e){
+                    currentEnter = $r(this);
+                    var width = parseInt(currentEnter.css('width')), target;
+
+                    $r('.closed').cancelAnimation();
+                    if(opened.e.className == 'img opened'){
+                        if(opened.e != this) {
+                            $r('.opened').animate(
+                                    'width',    //css
+                                    550,      //minimum
+                                    100,        //maximum
+                                    0.9,        //delay
+                                    1,          //duration
+                                    //delta
+                                    $r(false).setDelta(
+                                            'easeOut',
+                                            {name: 'quadrantic', progress: 4}
+                                    ),
+                                    'px',       //extension
+                                    false       //callback
+                            );
+                        }
+                        opened.e.className = 'img closed';
+                    }
+
+                    if(width < 550) {
+                        currentEnter.animate(
+                                'width',    //css
+                                width,      //minimum
+                                550,        //maximum
+                                0.9,        //delay
+                                1,          //duration
+                                //delta
+                                $r(false).setDelta(
+                                        'easeOut',
+                                        {name: 'quadrantic', progress: 4}
+                                ),
+                                'px',       //extension
+                                false       //callback
+                        );
+                        currentEnter.e.className = "img opened";
+                    }
+                });
+
+                $r(this).mouseLeave(function(e) {
+                    var current = $r(this), width = parseInt(current.css('width')), target;
+
+                    currentEnter.cancelAnimation();
+                    current.animate(
+                            'width',    //css
+                            width,      //minimum
+                            100,        //maximum
+                            0.9,        //delay
+                            1,          //duration
+                            //delta
+                            $r(false).setDelta(
+                                    'easeOut',
+                                    {name: 'quadrantic', progress: 4}
+                            ),
+                            'px',       //extension
+                            false       //callback
+                    );
+                    current.e.className = "img closed";
+                });
+            });
+        </script>
+        <script>
+            var obj = $r('.menu');
+
+            obj.on('touchstart', function(){
+                var width = parseInt(obj.css('width').replace('px', ''));
+                $r('li').show();
+
+                if(!obj.isMouseOver) {
+                    obj.css('box-shadow', 'inset -12px -1px 14px -6px rgba(0,0,0,0.4)');
+                    obj.animate(
+                            'width',    //css
+                            width,      //minimum
+                            200,        //maximum
+                            0.9,        //delay
+                            1,          //duration
+                            //delta
+                            $r(false).setDelta(
+                                    'easeOut',
+                                    {name: 'quadrantic', progress: 4},
+                                    false
+                            ),
+
+                            'px',       //extension
+                            false       //callback
+                    );
+                }
+            });
+
+            obj.mouseEnter(function(){
+                var width = parseInt(obj.css('width'));
+                $r('li').show();
+
+                if(!obj.isMouseOver) {
+                    obj.css('box-shadow', 'inset -12px -1px 14px -6px rgba(0,0,0,0.4)');
+                    obj.cancelAnimation();
+                    obj.animate(
+                            'width',    //css
+                            width,      //minimum
+                            200,        //maximum
+                            0.9,        //delay
+                            1,          //duration
+                            //delta
+                            $r(false).setDelta(
+                                    'easeOut',
+                                    {name: 'quadrantic', progress: 4}
+                            ),
+                            'px',       //extension
+                            false       //callback
+                    );
+                }
+            });
+
+            obj.mouseLeave(function(){
+                var width = parseInt(obj.css('width').replace('px', '')), e, target;
+                $r('li').hide();
+
+                if(obj.isMouseOver) {
+                    obj.css('box-shadow', 'none');
+                    obj.animate(
+                            'width',    //css
+                            width,      //minimum
+                            50,         //maximum
+                            0.9,        //delay
+                            0.8,        //duration
+                            //delta
+                            $r(false).setDelta(
+                                    'easeOut',
+                                    {name: 'quadrantic', progress: 4}
+                            ),
+                            'px',       //extension
+                            false       //callback
+                    );
+                }
+            });
+        </script>
+</body>
+</html>

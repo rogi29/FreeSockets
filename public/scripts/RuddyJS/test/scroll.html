@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello</title>
+    <style>
+        body {
+            height: 4000px;
+            background: url("images/maleficent01.jpg");
+        }
+        form {
+            position: fixed;
+        }
+    </style>
+    <script src="../support/dom4.js">/* DOM4 */</script>
+</head>
+<body data-ruddy="">
+    <form>
+        <input type="text" id="y" value="0" />
+        <input type="text" id="delta" value="quadrantic" />
+    </form>
+    <script src="../ruddy.js"></script>
+    <script src="../ext/animation.js"></script>
+    <script src="../ext/scroll.js"></script>
+    <script>
+        $r('#y').on('blur', function() {
+            $r(false).scrollY(this.value, {
+                delay:      0.9,    //delay
+                duration:   1,      //duration
+                delta:      $r(false).setDelta(
+                                'easeOut',
+                                {name: $r('#delta').e.value, progress: 4}
+                            )
+            });
+        });
+    </script>
+</body>
+</html>

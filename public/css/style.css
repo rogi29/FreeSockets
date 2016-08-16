@@ -1,0 +1,834 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+/*SIGN IN*/
+
+body[role="signin"] {
+  background: url("../images/shattered.png") repeat #39c9b9;
+  font-family: arial;
+  text-align: center;
+}
+
+body[role="signin"] main.container {
+  margin: 0;
+  top: 0;
+  background: url("../images/shattered_light.png") repeat #39c9b9;
+  border-radius: 0 0 220px 220px;
+	border-left: 50px solid rga(0,0,0,0);
+  height: 480px;
+  behavior: url(scripts/PIE/PIE.htc);
+}
+
+body[role="signin"] header #logo {
+  position: relative;
+  top: 20px;
+  margin-bottom: 50px;
+}
+
+.hidden {
+    display: none;
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+}
+
+#signin.container {
+  width: 480px;
+  margin: 0 auto;
+}
+
+#signin form {
+  position: relative;
+  width: 480px;
+}
+
+#signin input[type="text"], #signin input[type="password"], #signin input[type="email"] {
+  display: block;
+  margin: 34px auto 0 auto;
+  width: 400px;
+  height: 42px;
+  font-size: 18pt;
+  color: #ffffff;
+  background: rgba(255,255,255,0);
+  border: none;
+  border-bottom: 2px solid #ffffff;
+  transition: border 0.5s;
+  behavior: url(scripts/PIE/PIE.htc);
+}
+
+#signin input:focus {
+  outline: none;
+  border-bottom: 2px solid #feba4e;
+}
+
+#signin input::-webkit-input-placeholder   { color: #ffffff !important; }
+#signin input::-moz-placeholder            { color: #ffffff !important; }
+#signin input:-ms-input-placeholder        { color: #ffffff !important; }
+
+#signin input[type="submit"] {
+  position: absolute;
+  display: block;
+  width: 120px;
+  height: 46px;
+  right: 40px;
+  font-size: 18pt;
+  font-weight: bold;
+  color: #ffffff;
+  background: #ff425d;
+  -webkit-appearance: none;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.3);
+  margin-top: 34px;
+  transition: box-shadow 0.3s;
+  cursor: pointer;
+  behavior: url(scripts/PIE/PIE.htc);
+}
+
+#signin input[type="submit"]:hover {
+  box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.2);
+  behavior: url(scripts/PIE/PIE.htc);
+}
+
+footer {
+  width: 480px;
+  margin: 0 auto;
+}
+
+#slogen {
+  position: absolute;
+  color: #ffffff;
+  font-size: 20pt;
+  width: 480px;
+  margin: 0 auto;
+  top: 77%;
+}
+
+#credit {
+  position: absolute;
+  bottom: 40px;
+  width: 480px;
+  margin: 0 auto;
+  color: #ffffff;
+  font-size: 12pt;
+}
+
+/*CHAT APPLICATION*/
+
+body[role="application"] {
+  background: #ffffff;
+  font-family: arial;
+  display: flex;
+}
+
+body[role="application"] aside.container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background: url("../images/shattered_light.png") repeat #2ebfb1;
+  width: 16%;
+  height: 100%;
+  left: 0;
+  z-index: 99;
+  box-shadow: 0px 0px 1px 0px rgba(255, 255, 255, 1);
+  overflow: hidden;
+  behavior: url(scripts/PIE/PIE.htc);
+}
+
+body[role="application"] main.container {
+  width: 84%;
+  height: 100%;
+  overflow: hidden;
+  margin-left: 16%;
+}
+
+body[role="application"] header.container {
+  position: absolute;
+  background: url("../images/shattered_light.png") repeat #ffffff;
+  width: 84%;
+  height: 50px;
+  border-bottom: 1px solid  #36ddcd;
+  /*
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.16);
+  */
+  z-index: 10;
+  top: 0;
+  left: 16%;
+  margin-top: 0;
+}
+
+body[role="application"] section.container {
+  position: absolute;
+  background: url("../images/shattered_gray.png") repeat #333;
+  width: 84%;
+  height: 100%;
+  top: 0;
+  z-index: 0;
+  overflow: hidden;
+  left: 16%;
+}
+
+body[role="application"] section.container h4 {
+  display: none;
+  position: absolute;
+}
+
+#messages {
+  position: relative;
+  margin-top: 50px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 80%;
+  height: calc(100% - 100px);
+  *height: expression(document.documentElement.clientHeight-100+"px");
+}
+
+body[role="application"] footer.container {
+  width: 100%;
+  height: 50px;
+}
+
+body[role="application"] main.container div.footer-inner {
+  position: absolute;
+  background: #ffffff;
+  width: 84%;
+  height: 50px;
+  border-top: 1px solid #bbbbbb;
+  bottom: 0;
+  margin-top: 0;
+  left: 16%;
+}
+
+/* convo Picture */
+
+.convo-picture {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 50px;
+  behavior: url(scripts/PIE/PIE.htc);
+}
+
+.convo-picture img {
+  width: 50px;
+  height: 50px;
+  right: 0;
+  left: 0;
+}
+
+.convo-picture.two {
+}
+
+.convo-picture.two .combine div {
+  display: inline-block;
+  box-sizing: border-box;
+  overflow: hidden;
+  width: 25px;
+  border-right: 1px solid #cccccc;
+}
+
+.convo-picture.two .combine div ~ div {
+  border-right: none;
+  float: right;
+}
+
+.convo-picture.two .combine div img {
+  margin-left: -10px;
+}
+
+/* Aside */
+
+aside.container div.convos-controls {
+  position: relative;
+  width: 100%;
+  height: 53px;
+  border-bottom: 1px solid #36ddcd;
+}
+
+aside.container div.recent-convos {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+aside.container ul.convos-list {
+  text-align: center;
+}
+
+aside.container ul.convos-list li a {
+  display: block;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+aside.container ul.convos-list li {
+  background: rgba(255,255,255,0);
+  transition: background 0.5s;
+}
+
+aside.container ul.convos-list li.current {
+  background: rgba(255,255,255,0.1);
+}
+
+aside.container ul.convos-list li:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+aside.container div.recent-convos figure {
+  position: relative;
+  width: 100%;
+  padding: 10px 0px 10px 0px;
+  border: none;
+  border-bottom: 1px solid #37d2c3;
+}
+
+aside.container div.recent-convos figure figcaption {
+  color: #ffffff;
+  display: none;
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+}
+
+aside.container div.recent-convos figure span {
+  display: none;
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Controls */
+
+a.control {
+  position: relative;
+  display: inline-block;
+  font-size: 16pt;
+  color: #ffffff;
+  margin: 12.5px 16px 2px 2px;
+  top: 0;
+  transition: color 0.5s;
+}
+
+a.control:hover {
+  color: #ffd99b;
+}
+
+a.control.left {
+  left: 0;
+  margin-left: 16px;
+  float: left;
+}
+
+ a.control.right {
+  right: 0px;
+  float: right;
+}
+
+header .chat-controls {
+  width: 100%;
+}
+
+header .chat-controls .chat-title {
+  position: relative;
+  display: inline-block;
+  top: 8px;
+  left: 6px;
+  width: 44.2%;
+  max-height: 42px;
+  overflow: hidden;
+  color: #ffffff;
+}
+
+header .chat-controls .chat-title span.name {
+  display: block;
+  height: 18px;
+  font-size: 12pt;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+header .chat-controls .chat-title span.status {
+  display: block;
+  height: 18px;
+  margin-top: 2px;
+  font-size: 10pt;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Messages */
+
+div.message {
+  position: relative;
+  width: 96%;
+  padding: 0px 2% 10px 2%;
+}
+
+div.message.first {
+  padding: 10px 2% 10px 2%;
+}
+
+div.message.target {
+  text-align: left;
+}
+
+div.message.source {
+  text-align: right;
+}
+
+div.message.target h5 {
+  text-align: right;
+  color: #bbbbbb;
+}
+
+div.message.source h5 {
+  color: #a8f5ee;
+  text-align: right;
+}
+
+div.message.target figure {
+  float: left;
+  display: inline-block;
+  border: none;
+}
+
+div.message.source figure {
+  float: right;
+  display: inline-block;
+  border: none;
+}
+
+div.message figure img{
+  position: relative;
+  width: 50px;
+  height: 50px;
+  background: #ffffff;
+  border-radius: 50px;
+  right: 0;
+  left: 0;
+  behavior: url(scripts/PIE/PIE.htc);
+}
+
+div.message figure figcaption{
+  display: none;
+  visibility: hidden;
+}
+
+div.message .bubble {
+  position: relative;
+  display: inline-block;
+	max-width: 60%;
+	height: auto;
+  top: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  behavior: url(scripts/PIE/PIE.htc);
+}
+
+div.message.target .bubble {
+  background: #ffffff;
+  padding:6px 8px 5px 10px;
+  left: 66px;
+}
+
+div.message.target.first .bubble {
+  left: 16px;
+}
+
+div.message.source .bubble {
+  background: #36ddcd;
+  padding:6px 10px 5px 8px;
+  color: #ffffff;
+  right: 66px;
+}
+
+div.message.source.first .bubble {
+  right: 16px;
+}
+
+div.message.target.first .bubble:after{
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left: -12px;
+	right: auto;
+  top: 0px;
+	bottom: auto;
+	border: 15px solid;
+	border-color: #ffffff transparent transparent transparent;
+}
+
+div.message.source.first .bubble:after{
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left: auto;
+	right: -12px;
+  top: 0px;
+	bottom: auto;
+	border: 15px solid;
+	border-color: #36ddcd transparent transparent transparent;
+}
+
+/* Message Input */
+
+#message-input {
+  width: 84%;
+  height: 50px;
+  border: none;
+  font-size: 12pt;
+  padding-left: 10px;
+  color: #333333;
+  transition: font-size 0.3s;
+  behavior: url(scripts/PIE/PIE.htc);
+}
+
+#message-input:focus {
+  font-size: 14pt;
+  outline: none;
+}
+
+#message-submit {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  right: 0;
+  font-size: 18pt;
+  font-weight: bold;
+  color: #ffffff;
+  background: #ff425d;
+  -webkit-appearance: none;
+  border: none;
+  border-top: 1px solid #ff6e83;
+  cursor: pointer;
+  behavior: url(scripts/PIE/PIE.htc);
+}
+
+#message-submit:hover, #message-submit:active {
+  border: 2px solid #ff6e83;
+}
+
+/* @Media Quries */
+@media screen and (min-width: 1220px) and (min-height: 820px) {
+  body[role="application"] {
+    display: block;
+    background: url("../images/geometry.png") #efefef;
+  }
+
+  div.overwhole-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 1200px;
+    height: 800px;
+    margin: 3% auto;
+    background: #ffffff;
+    border-radius: 10px;
+    border: 1px solid  #ffffff;
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.14);
+    behavior: url(scripts/PIE/PIE.htc);
+  }
+
+  body[role="application"] aside.container {
+    position: relative;
+    display: inline-block;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: 0 auto;
+    width: 300px;
+    height: 800px;
+    border-radius: 10px 0 0 10px;
+    behavior: url(scripts/PIE/PIE.htc);
+  }
+
+  body[role="application"] main.container {
+    position: relative;
+    display: inline-block;
+    top: 0;
+    width: 900px;
+    height: 800px;
+    margin-left: 0;
+    left: 0;
+    border-radius: 0 10px 10px 0;
+    behavior: url(scripts/PIE/PIE.htc);
+  }
+
+  body[role="application"] header.container {
+    position: relative;
+    width: 900px;
+    left: 0;
+  }
+
+  body[role="application"] section.container {
+    position: relative;
+    top: 0;
+    width: 900px;
+    height: 700px;
+    left: 0;
+  }
+
+  #messages {
+    position: relative;
+    top: 0;
+    margin-top: 0;
+    width: 900px;
+    height: 700px;
+    left: 0;
+  }
+
+  body[role="application"] main.container div.footer-inner {
+    width: 900px;
+    left: 0;
+  }
+
+  div.convo-controls {
+    height: 50px;
+  }
+
+  div.convo-last {
+    height: 750px;
+  }
+
+  aside.container div.convos-controls {
+    height: 50px;
+  }
+}
+
+@media screen and (max-width: 1220px) {
+  body[role="application"] aside.container {
+    width: 30%;
+  }
+
+  body[role="application"] header.container {
+    width: 70%;
+    left: 30%;
+  }
+
+  body[role="application"] main.container {
+    width: 70%;
+    margin-left: 30%;
+  }
+
+  body[role="application"] section.container {
+    width: 70%;
+    left: 30%;
+  }
+
+  body[role="application"] main.container div.footer-inner {
+    width: 70%;
+    left: 30%;
+  }
+}
+
+@media screen and (min-width: 761px) {
+  .convo-picture {
+    display: block;
+    display: inline-block;
+    margin: 0;
+  }
+
+  .convo-picture.two {
+    margin-top: 0;
+  }
+
+  aside.container div.convos-controls {
+    position: relative;
+    width: 100%;
+    border-bottom: 1px solid #36ddcd;
+  }
+
+  aside.container div.recent-convos {
+    position: relative;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  aside.container ul.convos-list {
+    text-align: left;
+  }
+
+  aside.container div.recent-convos figure {
+    width: 100%;
+    padding: 10px 0px 10px 10px;
+    border-bottom: 1px solid #37d2c3;
+  }
+
+  aside.container div.recent-convos figure .images-combine {
+    display: inline-block;
+    margin: 0;
+  }
+
+  aside.container div.recent-convos div.convo-info {
+    width: 60%;
+    display: inline-block;
+  }
+
+  aside.container div.recent-convos figure span {
+    display: block;
+    position: relative;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  aside.container span.convo-name {
+    color: #ffffff;
+    width: 120%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  aside.container span.recent-message {
+    color: #a8f5ee;
+    width: 120%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 12pt;
+  }
+
+  aside.container span.recent-time {
+    color: #64e5d8;
+    font-size: 10pt;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  body[role="application"] aside.container {
+    width: 12%;
+  }
+
+  body[role="application"] header.container {
+    width: 88%;
+    left: 12%;
+  }
+
+  body[role="application"] main.container {
+    width: 88%;
+    margin-left: 12%;
+  }
+
+  body[role="application"] section.container {
+    width: 88%;
+    left: 12%;
+  }
+
+  body[role="application"] main.container div.footer-inner {
+    width: 88%;
+    left: 12%;
+  }
+
+  aside.container div.convos-controls nav .res-hide {
+    position: absolute;
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+  aside.container div.convos-controls nav {
+  width: 20px;
+  margin: 0 auto;
+    text-align: center;
+  }
+
+  aside.container div.convos-controls nav .res-center {
+    float: none;
+    margin-left: -1px;
+    font-size: 18pt;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  body[role="application"] aside.container {
+    width: 16%;
+  }
+
+  body[role="application"] header.container {
+    width: 84%;
+    left: 16%;
+  }
+
+  body[role="application"] main.container {
+    width: 84%;
+    margin-left: 16%;
+  }
+
+  body[role="application"] section.container {
+    width: 84%;
+    left: 16%;
+  }
+
+  body[role="application"] main.container div.footer-inner {
+    width: 84%;
+    left: 16%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #signin.container {
+    width: 100%;
+  }
+
+  #signin form {
+    width: 100%;
+  }
+
+  #signin input[type="text"], #signin input[type="password"], #signin input[type="email"] {
+    width: 90%;
+  }
+
+  body[role="signin"] footer.container {
+    width: 100%;
+  }
+
+  #slogen, #credit{
+    width: 100%;
+  }
+}
+
+
+
+@media screen and (max-width: 440px) {
+  body[role="application"] aside.container {
+    position: absolute;
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  body[role="application"] header.container {
+    width: 100%;
+    left: 0;
+  }
+
+  body[role="application"] main.container {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  body[role="application"] section.container {
+    width: 100%;
+    left: 0;
+  }
+
+  body[role="application"] footer.container div.footer-inner {
+    width: 100%;
+    left: 0;
+  }
+}
+
+@media screen and (max-width: 310px) {
+  body[role="application"] header.container .chat-controls .chat-title {
+    width: 35%;
+  }
+}

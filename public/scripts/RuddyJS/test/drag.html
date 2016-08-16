@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+        <style>
+            * {
+                margin: 0;
+                top: 0;
+                left: 0;
+                transform: translate(0,0);
+            }
+
+            #empty {
+                z-index: 100;
+                position: absolute;
+                margin-top: 100px;
+                margin-left: 100px;
+                width: 40px;
+                height: 40px;
+                border: 1px solid #cccccc;
+            }
+
+            #dragme {
+                width: 40px;
+                height: 40px;
+                background: #398399;
+                border: 1px solid #333333;
+                color: #ffffff;
+                text-align: center;
+                cursor: pointer;
+            }
+
+            .dropme {
+                z-index: 0;
+                position: absolute;
+                width: 40px;
+                height: 40px;
+                background: #666666;
+                border: 1px solid #222222;
+            }
+        </style>
+        <script src="../support/dom4.js">/* DOM4 */</script>
+    </head>
+    <body>
+        <!--Sync a draggable element with a drop area-->
+        <p style="float:left; margin-left: 10px;">Sync with the drop area</p>
+        <input type="checkbox" id="sync" name="sync" style="margin-top: 3px; margin-left: 10px; width: 15px; height: 15px;" />
+        <div id="empty">
+            <div id="dragme">Drag Me</div>
+        </div>
+        <div class="dropme" style="margin-top: 450px; margin-left: 600px;"></div>
+        <div class="dropme" style="margin-top: 400px; margin-left: 800px;"></div>
+        <div class="dropme" style="margin-top: 80px; margin-left: 400px;"></div>
+
+        <script src="../ruddy.js"></script>
+        <script src="../ext/event.js"></script>
+        <script>
+            var sync = document.getElementById("sync").checked;
+
+            $r('#dragme').draggable(false, true);
+            $r('#dragme').on('drag.start', function(){
+                sync = document.getElementById("sync").checked;
+                $r(this).css('border', '1px solid red');
+            });
+
+            $r('#dragme').on('drag.move', function(){
+                $r(this).css('opacity', '0.3');
+            });
+
+            $r('#dragme').on('drag.end', function(){
+                var obj = this, flag = false;
+
+                $r('.dropme').each(function(){
+                    var pos = $r(this).position(), size = $r(this).size();
+                    flag = (!flag) ? $r(obj).droppable({x: pos.x, y: pos.y, width: size.width, height: size.height}, sync) : true;
+                }, function(){
+                    if(!flag){
+                        $r(obj).css('opacity', '1');
+                        $r(obj).css('border', '1px solid #333');
+                        $r(obj).css('background-color', '#398399');
+                        obj.e.detail.normalize();
+                    }
+                });
+            });
+
+            $r('#dragme').on('drop.enter', function() {
+                $r(this).css('opacity', '1');
+                $r(this).css('border', '1px solid blue');
+                $r(this).css('background-color', '#cccccc');
+            });
+        </script>
+    </body>
+</html>

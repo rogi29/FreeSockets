@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        .visible {
+            width: 300px;
+        }
+    </style>
+    <script src="../support/dom4.js">/* DOM4 */</script>X
+</head>
+<body>
+<input id="m" value="hello">
+<div class="visible">Hello {{#name}}</div>
+<div class="visible">Hello ssxD</div>
+<div class="visible">Heo ssxD</div>
+<input type="text" name="name" id="name" />
+<button class="button">Click Here</button>
+<script src="../ruddy.js"></script>
+<script src="../ext/input.js"></script>
+<script>
+    var key = null, down = false, up = false;
+    function isKeyDown(keyName) {
+        $r(document).on('keydown', function () {
+            var keyID = this.e.keyCode || this.e.which;
+
+            if (keyID == $r(false).keyCode(keyName)) {
+                down = true;
+                key = keyID;
+            }
+        });
+
+        return {bool: down, key: key};
+    }
+
+    function isKeyUp(key) {
+        $r(document).on('keyup', function () {
+            var keyID = this.e.keyCode || this.e.which;
+
+            if (keyID == $r(false).keyCode(keyName)) {
+                up = true;
+                key = keyID;
+            }
+        });
+    }
+</script>
+</body>
+</html>

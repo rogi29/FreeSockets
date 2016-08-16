@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+        <script src="../support/dom4.js">/* DOM4 */</script>
+    </head>
+    <body>
+        <div id="drawing">
+        </div>
+        <script src="../ruddy.js"></script>
+        <script src="../ext/event.js"></script>
+        <script src="../ext/scope.js?v=1"></script>
+        <script>
+            $r(false).scope.$watch('xd','lo');
+            debug($r(false).scope.$$watchers);
+        </script>
+    </body>
+</html>

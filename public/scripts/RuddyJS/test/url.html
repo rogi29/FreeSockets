@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello</title>
+    <style>
+        body {
+            height: 2300px;
+        }
+        .wrapper {
+            position: fixed;
+        }
+        #button {
+            float: left;
+        }
+    </style>
+    <script src="../support/dom4.js">/* DOM4 */</script>
+</head>
+<body data-ruddy="">
+<div class="wrapper">
+    <form>
+        <input type="text" id="url" placeholder="url input" />
+    </form>
+    <button id="button">Change Url</button>
+</div>
+<script src="../ruddy.js"></script>
+<script src="../ext/ajax.js"></script>
+<script>
+    $r('#button').click(function() {
+        var val = $r('#url').e.value;
+        $r().pushURL(val, val);
+    });
+</script>
+</body>
+</html>

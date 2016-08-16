@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{head.title}}</title>
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="css/style.css?v=0.01">
+</head>
+
+<body role="signin">
+  <main class="container" role="main">
+    <header class="container">
+        <div id="logo">
+          <img src="images/logo_01.png" style="width:360px; height: 157px;" alt="logo" />
+        </div>
+    </header>
+
+    <div id="signin" class="container">
+        <label id="signin_error"></label>
+        <form id="signin_form" action="">
+            <input id="signin_email" name="signin[email]" type="email" placeholder="Email" required />
+            <input id="signin_password" name="signin[password]" type="password" placeholder="Password" required />
+            <input id="signin_submit"   name="signin[submit]"   type="submit" value="CHAT" />
+        </form>
+        <form id="signin_next_form" class="hidden" class="hidden" action="">
+            <input id="signin_back"   name="signin[back]"   type="submit" value="BACK" style="position:absolute; float: left; left: 40px;" />
+            <input id="signin_next"   name="signin[next]"   type="submit" value="SIGN UP" style="float:right;" />
+        </form>
+        <form id="signup_form" class="hidden" action="">
+            <input id="signup_fullname" name="signup[fullname]" type="text" placeholder="Full Name" required />
+            <input id="signup_back"     name="signup[back]"     type="submit" value="BACK" style="position:absolute; float: left; left: 40px;" />
+            <input id="signup_submit"   name="signup[submit]"   type="submit" value="CHAT" style="float:right;" />
+        </form>
+    </div>
+  </main>
+
+  <footer class="container">
+    <p id="slogen">Chat with anybody anytime</p>
+    <p id="credit">Developed by George Qubty and Gil Nimer</p>
+  </footer>
+  
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="scripts/RuddyJS/ruddy.js"></script>
+    <script src="scripts/RuddyJS/ext/input.js"></script>
+    <script src="scripts/modules/signin.js"></script>
+    <script>
+    </script>
+</body>
+</html>

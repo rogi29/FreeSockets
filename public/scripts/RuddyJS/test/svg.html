@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+        <script src="../support/dom4.js">/* DOM4 */</script>
+    </head>
+    <body>
+        <div id="drawing">
+        </div>
+        <script src="../ruddy.js"></script>
+        <script src="../ext/event.js"></script>
+        <script src="../svg.min.js"></script>
+        <script>
+            if (SVG.supported) {
+                var draw = SVG('drawing').size(100, 150);
+                var line = draw.line(0, 0, 100, 150).stroke({ width: 3 });
+
+                $r(draw.node).draggable(false, true);
+                $r(draw.node).on('drag.start', function(){
+
+                });
+            } else {
+                alert('SVG not supported')
+            }
+        </script>
+    </body>
+</html>

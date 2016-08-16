@@ -1,0 +1,49 @@
+{
+    "$users": {
+        "queries": {
+            "_id": 1,
+            "fullname": 1,
+            "email": 1,
+            "password": 1,
+            "profile_picture": 1,
+            "status": 1,
+            "date": 1
+        },
+
+        "get": {
+            "params": {
+                "me": "Sesssion:ObjectID",
+                "_ID": "Params:ObjectID",
+                "public": null
+            },
+
+            "fields": {
+                "_id": 1,
+                "fullname": 1,
+                "email": 1,
+                "profile_picture": 1,
+                "status": 1,
+                "date": 1
+            }
+        },
+
+        "post": {
+            "insert": {
+                "profile_picture": "",
+                "data": "Params:Date",
+                "satus": 0
+            },
+
+            "params": {
+                "json": "$insert",
+                "params": "object"
+            },
+
+            "fields": {
+                "fullname": 1,
+                "email": 1,
+                "password": 1
+            }
+        }
+    }
+}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)file:///E:/Downloads/index.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Navi concept</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <style>
+            html, * {
+                padding: 0;
+                margin: 0;
+            }
+            
+            body {
+                background-color: #333333;
+            }
+            
+            nav {
+                position: fixed;
+            }
+            
+            a {
+                text-decoration: none;
+                color: white;
+            }
+            
+            .menu {
+                position: fixed;
+                height: 100%;
+                width: 50px;
+                border-right: 3px solid deepskyblue;
+                background: #222222;
+            }
+            
+            .menu li {
+                position: relative;
+                padding-left: 20px;
+                height: 50px;
+                line-height: 50px;
+                display: none;
+            }
+            
+            .menu li:hover {
+                background-color: gray;
+            }
+            
+            .menu li a {
+                display: block;
+            }
+            
+            .menu:hover li {
+                display: block;
+            }
+            
+            
+        </style>
+        <script src="../support/dom4.js">/* DOM4 */</script>
+    </head>
+    <body>
+        <header></header>
+        <nav>
+            <ul class="menu" style="width: 50px;">
+                <li><a href="#">Test</a></li>
+                <li><a href="#">Test</a></li>
+            </ul>
+        </nav>
+        <script src="../ruddy.js"></script>
+        <script src="../ext/animation.js"></script>
+        <script>
+            var obj = $r('.menu');
+
+            obj.on('touchstart', function(){
+                var width = parseInt(obj.css('width').replace('px', ''));
+                $r('li').show();
+
+                if(!obj.isMouseOver) {
+                    obj.animate(
+                            'width',    //css
+                            width,      //minimum
+                            200,        //maximum
+                            0.9,        //delay
+                            1,          //duration
+                            //delta
+                            $r(false).setDelta(
+                                    'easeOut',
+                                    {name: 'quadrantic', progress: 4},
+                                    false
+                            ),
+
+                            'px'       //extension
+                    );
+                }
+            });
+
+            obj.mouseEnter(function(){
+                var width = parseInt(obj.css('width'));
+                $r('li').show();
+
+                if(!obj.isMouseOver) {
+                    obj.cancelAnimation();
+                    obj.animate(
+                            'width',    //css
+                            width,      //minimum
+                            200,        //maximum
+                            0.9,        //delay
+                            1,          //duration
+                            //delta
+                            $r(false).setDelta(
+                                    'easeOut',
+                                    {name: 'quadrantic', progress: 4}
+                            ),
+                            'px'       //extension
+                    );
+                }
+            });
+
+            obj.mouseLeave(function(){
+                var width = parseInt(obj.css('width').replace('px', '')), e, target;
+                $r('li').hide();
+
+                if(obj.isMouseOver) {
+                    obj.animate(
+                            'width',    //css
+                            width,      //minimum
+                            50,         //maximum
+                            0.9,        //delay
+                            0.8,        //duration
+                            //delta
+                            $r(false).setDelta(
+                                    'easeOut',
+                                    {name: 'quadrantic', progress: 4}
+                            ),
+                            'px'       //extension
+                    );
+                }
+            });
+        </script>
+</body>
+</html>

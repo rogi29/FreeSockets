@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)file:///E:/Downloads/index.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Navi concept</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <style>
+            html, * {
+                padding: 0px;
+                margin: 0px;
+            }
+            
+            body {
+                background-color: black;
+            }
+            
+            nav {
+                position: fixed;
+            }
+            
+            a {
+                text-decoration: none;
+                color: white;
+            }
+            
+            .menu {
+                position: fixed;
+                height: 100%;
+                width: 50px;
+            }
+            
+            .menu li {
+                padding-left: 20px;
+                height: 50px;
+                line-height: 50px;
+                display: none;
+            }
+            
+            .menu li:hover {
+                background-color: gray;
+            }
+            
+            .menu li a {
+                display: block;
+            }
+            
+            .menu:hover li {
+                display: block;
+            }
+            
+            
+        </style>
+        <script src="../support/dom4.js">/* DOM4 */</script>
+    </head>
+    <body>
+        <nav>
+            <ul class="menu" style="width: 50px;">
+                <li><a href="#">Test</a></li>
+                <li><a href="#">Test</a></li>
+            </ul>
+        </nav>
+
+        <script src="../ruddy.js"></script>
+        <script src="../ext/animation.js"></script>
+        <script>
+            var obj = $r('.menu');
+            obj.mouseEnter(function(){
+                $r('li').show();
+                obj.css('border-right', '3px solid yellow');
+
+                if(!obj.isMouseOver) {
+                    obj.animate(
+                            'width',
+                            50,         //minimum
+                            200,        //maximum
+                            0.9,        //delay
+                            1,          //duration
+                            //delta
+                            $r(false).setDelta(
+                                    'easeOut',
+                                    {name: 'quadrantic', progress: 4},
+                                    false
+                            ),
+                            'px',       //extension
+                            false,      //callback
+                            (!obj.isMouseOver)
+                    );
+                }
+            });
+
+            obj.mouseLeave(function(){
+                $r('li').hide();
+                if(obj.isMouseOver) {
+                    obj.cancelAnimation();
+                    obj.css('width', '50px');
+                    obj.css('border-right', 'none');
+                }
+            });
+        </script>
+</body>
+</html>

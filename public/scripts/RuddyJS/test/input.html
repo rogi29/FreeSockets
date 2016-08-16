@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../support/dom4.js">/* DOM4 */</script>
+</head>
+<body>
+    <p id="error"></p>
+    <form>
+        <input type="text" id="first" />
+        <input type="text" id="second" />
+    </form>
+
+    <script src="../ruddy.js"></script>
+    <script src="../ext/input.js"></script>
+    <script>
+        $r('#first').emptyInput(function(){
+            if(this != false) {
+                $r('#error').html('first - empty');
+            }
+        });
+
+        $r('#second').emptyInput(function(){
+            if(this != false) {
+                $r('#error').html('second - empty');
+            }
+        });
+
+        $r('#first').inputMatch($r('#second'), function(){
+            var text = (this != false) ? 'Match' : 'No Match';
+            $r('#error').html(text);
+        });
+
+        $r('#second').inputMatch($r('#first'), function(){
+            if($r('#error').html() != '') {
+                var text = (this != false) ? 'Match' : 'No Match';
+                $r('#error').html(text);
+            }
+        });
+    </script>
+</body>
+</html>

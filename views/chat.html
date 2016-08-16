@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{head.title}}</title>
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link class="cssfx" rel="stylesheet" href="css/style.css?v=0.02">
+    <link class="cssfx" rel="stylesheet" href="css/perfect-scrollbar.min.css">
+    <link class="cssfx" rel="stylesheet" href="css/font-awesome.min.css">
+    <!--[if IE 7]>
+    <link class="cssfx" rel="stylesheet" href="css/font-awesome-ie7.css">
+    <![endif]-->
+    <script src="scripts/cssfx.js"></script>
+    <!--[if lt IE 10]>
+    <script src="scripts/respond.min.js"></script>
+    <script src="scripts/html5shiv.min.js"></script>
+    <![endif]-->
+</head>
+
+<body role="application">
+<div class="overwhole-container">
+    <aside class="container">
+        <div class="convos-controls">
+            <nav>
+                <a href="#search" title="Search People" area-label="Search People" class="control left res-hide"><i class="fa fa-search" aria-hidden="true"></i></a>
+                <a href="#new.convo" title="New Conversation" area-label="New Conversation" class="control right res-center"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+            </nav>
+        </div>
+        <div class="recent-convos">
+            <ul class="convos-list">
+                <li class="current">
+                    <a href="#George.Qubty&Roni.Nimer">
+                        <figure>
+                            <div class="convo-picture two">
+                                <div class="combine">
+                                    <div class="first"><img title="George Qubty" src="images/george_profile.jpg" alt="Profile Picture" width="50" height="50"></div>
+                                    <div class="second"><img title="Roni Nimer" src="images/roni_profile.jpg" alt="Profile Picture" width="50" height="50"></div>
+                                </div>
+                            </div>
+                            <figcaption>George Qubty, Roni Nimer</figcaption>
+                            <div class="convo-info">
+                                <span class="convo-name">George Qubty, Roni Nimer</span>
+                                <span class="recent-message">George: hello there how are you?</span>
+                                <span class="recent-time">
+                                  <time>today</time>
+                                </span>
+                            </div>
+                        </figure>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#George Qubty">
+                        <figure>
+                            <div class="convo-picture one">
+                                <img title="George Qubty" src="images/george_profile.jpg" alt="Profile Picture" width="50" height="50">
+                            </div>
+                            <figcaption>George Qubty</figcaption>
+                            <div class="convo-info">
+                                <span class="convo-name">George Qubty</span>
+                                <span class="recent-message">Hey bro!</span>
+                                <span class="recent-time">
+                                  <time>today</time>
+                                </span>
+                            </div>
+                        </figure>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#Roni Nimer">
+                        <figure>
+                            <div class="convo-picture one">
+                                <img title="Roni Nimer" src="images/roni_profile.jpg"  alt="Profile Picture" width="50" height="50">
+                            </div>
+                            <figcaption>Roni Nimer</figcaption>
+                            <div class="convo-info">
+                                <span class="convo-name">Roni Nimer</span>
+                                <span class="recent-message">empty</span>
+                                <span class="recent-time">
+                                  <time>today</time>
+                                </span>
+                            </div>
+                        </figure>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="container" role="main">
+        <header class="container">
+            <nav class="chat-controls">
+                <a href="#refresh" title="Users" area-label="Users" class="control left"><i class="fa fa-user" aria-hidden="true"></i></a>
+                <div class="chat-title">
+                    <span title="Qeorge Qubty, Roni Nimer" class="name">George Qubty, Roni Nimer</span>
+                    <span title="Active" class="status">Active</span>
+                </div>
+                <a href="#settings" title="Settings" area-label="Settings" class="control right"><i class="fa fa-cog" aria-hidden="true"></i></a>
+                <a href="" id="signout" title="Sign Out" area-label="Sign Out" class="control right"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+                <a href="#settings" title="Conversations" area-label="Conversations" class="control right"><i class="fa fa-comments" aria-hidden="true"></i></a>
+            </nav>
+        </header>
+
+        <section class="container" role="dialog">
+            <h4>Messages</h4>
+            <div aria-label="Messages" id="messages">
+                <div class="message source first">
+                    <figure>
+                        <img title="Gil Nimer" src="images/gil_profile.jpg" alt="Profile Picture" width="50" height="50">
+                        <figcaption>Name</figcaption>
+                    </figure>
+                    <div class="bubble">
+                        hello there how are you?
+                        <h5><time>today</time></h5>
+                    </div>
+                </div>
+
+                <div class="message source">
+                    <div class="bubble">
+                        long time
+                        <h5><time>today</time></h5>
+                    </div>
+                </div>
+
+                <div class="message target first">
+                    <figure>
+                        <img title="George Qubty" src="images/george_profile.jpg" alt="Profile Picture" width="50" height="50">
+                        <figcaption>Name</figcaption>
+                    </figure>
+                    <div class="bubble">
+                        hello there how are you?
+                        <h5><time>today</time></h5>
+                    </div>
+                </div>
+
+                <div class="message target">
+                    <div class="bubble">
+                        long time
+                        <h5><time>today</time></h5>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="container">
+            <div class="footer-inner">
+                <div area-label="New Message" role="region">
+                    <form id="message-form" action="">
+                        <input id="message-input" type="text" placeholder="Type a message..." name="message" />
+                        <button id="message-submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+        </footer>
+    </main>
+</div>
+<!--[if gte IE 10 | !IE ]><!-->
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/perfect-scrollbar.min.js"></script>
+<script>
+    var el = document.querySelector('.recent-convos');
+    var el2 = document.getElementById('messages');
+    Ps.initialize(el);
+    Ps.initialize(el2);
+</script>
+<![endif]-->
+<!--[if lt IE 9]>
+<script src="scripts/placeholders.min.js"></script>
+<script>
+    var msgs = document.getElementById('messages'),
+            header = 50, footer = 50,
+            height = function () {
+                var
+                        w = window,
+                        d = document,
+                        e = d.documentElement,
+                        g = d.getElementsByTagName('body')[0];
+
+                return w.innerHeight || e.clientHeight || g.clientHeight;
+            }
+
+    msgs.style.height = (height() - header - footer) + 'px';
+
+    if(window.addEventListener){
+        window.addEventListener('resize', changeMsgsHeight);
+    } else if(window.attachEvent){
+        window.attachEvent("onresize", changeMsgsHeight);
+    }
+
+    function changeMsgsHeight() {
+        msgs.style.height = (height() - header - footer) + 'px';
+    }
+</script>
+<![endif]-->
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="scripts/RuddyJS/ruddy.js"></script>
+<script>
+    var socket = io();
+    $r('#signout').on('click', function() {
+        this.event.preventDefault();
+        socket.emit('signout', []);
+    });
+
+    socket.on('signout_respond', function(data) {
+        if(data === true) {
+            window.location = '';
+        }
+    });
+</script>
+</body>
+</html>
