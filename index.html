@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free Sockets - Login</title>
-    <link rel="shortcut icon" href="http://127.0.0.1/FreeSockets/images/favicon.ico">
-    <link rel="stylesheet" href="http://127.0.0.1/FreeSockets/css/style.css?v=0.01">
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="css/style.css?v=0.01">
 </head>
 
 <body role="login">
   <main class="container" role="main">
     <header class="container">
         <div id="logo">
-          <img src="http://127.0.0.1/FreeSockets/images/logo_01.png" style="width:360px; height: 157px;" alt="logo" />
+          <img src="images/logo_01.png" style="width:360px; height: 157px;" alt="logo" />
         </div>
     </header>
 
@@ -31,25 +31,5 @@
     <p id="slogen">Chat with anybody anytime</p>
     <p id="credit">Developed by George Qubty and Gil Nimer</p>
   </footer>
-  
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-	<script src="http://127.0.0.1/RuddyJS/ruddy.js"></script>
-    <script>
-		var socket = io('46.121.212.107:3000');
-		$r('#login_form').on('submit', function() {
-			socket.emit('authentication', {fullname: $r('#login_fullname').e.value.toLowerCase(), password: $r('#login_password').e.value});
-			$r('#login_fullname').e.value = '';
-			$r('#login_password').e.value = '';
-			this.e.preventDefault();
-		});
-
-		socket.on('authenticated', function(data){
-			$r('#logged').html(data.fullname);
-		});
-
-		socket.on('error', function(data){
-			$r('#logged').html(data);
-		});
-    </script>
 </body>
 </html>
