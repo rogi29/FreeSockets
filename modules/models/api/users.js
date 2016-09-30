@@ -1,92 +1,19 @@
 /**
  *
- * @type {connect.ObjectID|*}
- */
-var fs          = require('fs'),
-    ObjectID    = require('mongodb').ObjectID,
-    api         = JSON.parse(fs.readFileSync('./api.json', 'utf8'))['$users'],
-    queryList   = api['queries'];
-
-/**
- *
- * @param db
- * @param cache
- * @param params
- * @param fields
+ * @param req
  * @returns {{find: find, insert: insert, update: update, remove: remove}}
  */
-module.exports = function(db, cache, params, fields) {
-    /**
-     *
-     * @type {*|Collection}
-     */
-    var users = db.collection('users');
-
-    /**
-     * Get Object ID
-     *
-     * @param id
-     * @param callback
-     * @returns {*}
-     */
-    function getID(id, callback)
-    {
-        var id = id.toString(),
-            regex = new RegExp("^[0-9a-fA-F]{24}$");
-
-        if((id).match(regex) ==  null){
-            callback({});
-            return false;
-        }
-
-        return ObjectID(id);
-    }
-
-    /**
-     * Filter an Object
-     *
-     * @param obj
-     * @param whitelist
-     * @returns {*}
-     */
-    function filterObj(obj, whitelist)
-    {
-        var key;
-
-        for(key in obj) {
-            if(!(key in whitelist)) {
-                delete obj[key];
-            }
-        }
-
-        return obj;
-    }
-
-    /**
-     * Valid a URL Parameter
-     *
-     * @param param
-     * @param params
-     * @param list
-     * @returns {*}
-     */
-    function validParam(param, params, list)
-    {
-        var key;
-
-        for(key in list){
-            if(param == key) {
-                return list[key];
-            }
-
-            if(key[0] == '_' && key in params) {
-                return list[key];
-            }
-        }
-
-        return false;
-    }
-
+module.exports = function(req) {
+    var
+        fields      = req.fields        || {},
+        params      = req.params        || {},
+        objects     = req.objects       || {},
+        mongo       = req.mongo         || {},
+        api         = req.api['$users'] || {},
+        session     = req.decoded || req.session || {},
+        queryList   = api['queries'],
+        collection  = mongo.collection('users'),
+        utils       = require('./utils.js')(params, fields, objects, session);
 
     /**
      * Find User/s
@@ -95,38 +22,42 @@ module.exports = function(db, cache, params, fields) {
      */
     function find(callback)
     {
-        var fieldList   = api['get']['fields'],
+        var
+            fieldList   = api['get']['fields'],
             paramList   = api['get']['params'],
-            get_fields  = ('get_fields' in fields) ? filterObj(fields['get_fields'], fieldList) : fieldList,
-            queries     = false;
+            get_fields  = ('get_fields' in fields) ? utils.filterObj(utils.strToList(fields['get_fields'], ','), fieldList) : fieldList,
+            queries     = false,
+            param       = utils.compileStr(utils.validParam(params._ID, params, paramList));
 
-        switch(validParam(params._ID, params, paramList)) {
-            case 'Sesssion:ObjectID':
-                queries = getID("57ae70f2c70d66c81dc8f8f8", callback);
-                break;
-
-            case 'Params:ObjectID':
-                queries = getID(params._ID, callback);
+        switch(param) {
+            case false:
+                queries = false;
                 break;
 
             case null:
                 delete fields['get_fields'];
-                queries = filterObj(fields, queryList);
+                queries = utils.filterObj(fields, queryList);
                 break;
 
             default:
-                queries = false;
+                queries = {_id: param};
                 break;
         }
 
-        if(!queries)  {
-            callback({});
+        queries = utils.validateQueries(queries, queryList);
+        if('errors' in queries) {
+            callback({errors: queries.errors});
             return;
         }
 
-        users.find(queries, get_fields).toArray(function(err, docs){
+        if('password' in queries && !('email' in queries)) {
+            callback({errors: [utils.error('email field is missing', 'missingFields', 'quries')]});
+            return;
+        }
+        collection.find(queries, get_fields).toArray(function(err, docs) {
             if(err || !docs) {
-                callback({});
+                callback({errors: [utils.error(err.message.split(':')[0], 'apiDatabaseException', 'find')]});
+                return;
             }
 
             callback(docs);
@@ -140,38 +71,48 @@ module.exports = function(db, cache, params, fields) {
      */
     function insert(callback)
     {
-        var fieldList   = api['post']['fields'],
+        var
+            fieldList   = api['post']['fields'],
             paramList   = api['post']['params'],
-            inserList   = api['post']['insert'],
-            queries     = false;
+            insertList  = api['post']['autoInsert'],
+            queries     = false,
+            param       = utils.compileStr(utils.validParam(params._method, params, paramList));
 
-
-        switch(validParam(params._ID, params, paramList)) {
-            case '$insert':
-                queries = ('insert' in fields) ? filterObj(JSON.parse(fields['insert']), fieldList) : false;
+        switch(param) {
+            case false:
+                queries = false;
                 break;
 
-            case 'object':
-                queries = (JSON.stringify(fields) !== JSON.stringify({})) ? filterObj(JSON.parse(fields), fieldList): false;
+            case null:
+                queries = (JSON.stringify(fields) !== JSON.stringify({})) ? utils.filterObj(fields, fieldList) : false;
                 break;
 
             default:
-                queries = false;
+                queries = utils.filterObj(JSON.parse(param), fieldList);
                 break;
         }
 
-
-        if(!queries)  {
-            callback({});
+        if(Object.keys(queries).length != Object.keys(fieldList).length) {
+            callback({errors: [utils.error('Some fields are missing', 'missingFields', 'queries')]});
             return;
         }
 
-        users.insertOne(queries, function(err, docs){
+        queries = utils.validateQueries(queries, queryList);
+        if('errors' in queries) {
+            callback({errors: queries.errors});
+            return;
+        }
+
+        queries = Object.assign(queries, utils.compileObj(insertList));
+        collection.createIndex({email:1},{unique:true});
+        collection.insertOne(queries, function(err, docs){
             if(err || !docs) {
-                callback({});
+                callback({errors: [utils.error(err.message.split(':')[0], 'apiDatabaseException', 'insertOne')]});
+                return;
             }
 
             callback(docs);
+            collection.dropIndex({email : 1});
         });
     }
 

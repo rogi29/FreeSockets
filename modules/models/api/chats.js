@@ -1,117 +1,125 @@
 /**
  *
- * @type {connect.ObjectID|*}
- */
-var ObjectID = require('mongodb').ObjectID,
-    allowedFields   = {"_id": 1, "fullname": 1, "email": 1, "profile_picture": 1, "status": 1};
-
-/**
- *
- * @param fields
- * @returns {*}
- */
-function filterQueries(fields) {
-    delete fields['get_fields'];
-
-    if(JSON.stringify(fields) === JSON.stringify({})){
-        return {};
-    }
-
-    for (var key in fields) {
-        if(!allowedFields[key] && key != 'password') {
-            delete fields[key];
-        }
-    }
-
-    return fields;
-}
-
-/**
- *
- * @param fields
- * @returns {*}
- */
-function filterFields(fields)
-{
-    var obj = {}, length, i;
-
-    if("get_fields" in fields && fields['get_fields'] != null) {
-        get_fields = fields.get_fields.split(",");
-        length = get_fields.length;
-
-        for(i = 0; i < length; i++) {
-            if(!(get_fields[i] in allowedFields)){
-                delete get_fields[i];
-            } else {
-                obj[get_fields[i]] = 1;
-            }
-        }
-
-        return obj;
-    }
-
-    return allowedFields;
-}
-
-/**
- *
- * @param db
- * @param params
- * @param fields
+ * @param req
  * @returns {{find: find, insert: insert, update: update, remove: remove}}
  */
-module.exports = function(db, params, fields) {
-    /**
-     *
-     * @type {*|Collection}
-     */
-    var users = db.collection('users');
+module.exports = function(req) {
+    var
+        fields      = req.fields        || {},
+        params      = req.params        || {},
+        objects     = req.objects       || {},
+        mongo       = req.mongo         || {},
+        api         = req.api['$chats'] || {},
+        session     = req.decoded || req.session || {},
+        queryList   = api['queries'],
+        collection  = mongo.collection('chats'),
+        utils       = require('./utils.js')(params, fields, objects, session);
 
     /**
+     * Find Chat/s
      *
      * @param callback
      */
     function find(callback)
     {
-        var query = null,
-            regex = new RegExp("^[0-9a-fA-F]{24}$"),
-            get_fields = filterFields(fields);
+        var
+            fieldList   = api['get']['fields'],
+            paramList   = api['get']['params'],
+            get_fields  = ('get_fields' in fields) ? utils.filterObj(utils.strToList(fields['get_fields'], ','), fieldList) : fieldList,
+            queries     = false,
+            param       = utils.compileStr(utils.validParam(params._ID, params, paramList));
 
-
-        params._ID  = params._ID.toString();
-
-        switch(params._ID) {
-            case 'me':
-                query = ObjectID("57ae70f2c70d66c81dc8f8f8");
-                break;
-
-            case 'public':
-                query = filterQueries(fields);
+        switch(param) {
+            case false:
+                queries = false;
                 break;
 
             default:
-                if((params._ID).match(regex) ==  null){
-                    callback({});
+                delete fields['get_fields'];
+                queries = utils.filterObj(fields, queryList);
+
+                param = utils.validateQuery(param, 'adminid', queryList);
+                if(typeof param === 'object' && '$errors' in param) {
+                    callback(param);
                     return;
                 }
-
-                query = ObjectID(params._ID);
                 break;
         }
 
-        users.find(query, get_fields).toArray(function(err, docs){
+        queries = utils.validateQueries(queries, queryList);
+        if('errors' in queries) {
+            callback({errors: queries.errors});
+            return;
+        }
+
+        queries['members'] = {
+            $elemMatch: {userid: param}
+        };
+
+        collection.find(queries, get_fields).toArray(function(err, docs) {
+            if(err || !docs) {
+                callback({errors: [utils.error(err.message.split(':')[0], 'apiDatabaseException', 'find')]});
+                return;
+            }
+
             callback(docs);
         });
     }
-
+    
     /**
+     * Insert Chat/s
      *
      * @param callback
      */
     function insert(callback)
     {
-        var query = null;
-        callback(data);
+        var
+            fieldList   = api['post']['fields'],
+            paramList   = api['post']['params'],
+            insertList  = api['post']['autoInsert'],
+            queries     = false,
+            param       = utils.compileStr(utils.validParam(params._method, params, paramList));
+
+        switch(param) {
+            case false:
+                queries = false;
+                break;
+
+            case null:
+                queries = (JSON.stringify(fields) !== JSON.stringify({})) ? utils.filterObj(fields, fieldList) : false;
+                break;
+
+            default:
+                queries = utils.filterObj(JSON.parse(param), fieldList);
+                break;
+        }
+
+        queries.members = session._ID + ',' + queries.members;
+        queries.members = utils.strToObj(queries.members, ',', 'userid', function(obj, index){
+            obj[index]['date'] = objects.Date;
+            return obj;
+        });
+
+        if(Object.keys(queries).length != Object.keys(fieldList).length) {
+            callback({errors: [utils.error('Some fields are missing', 'missingFields', 'queries')]});
+            return;
+        }
+
+        queries = utils.validateQueries(queries, queryList);
+        if('errors' in queries) {
+            callback({errors: queries.errors});
+            return;
+        }
+
+        queries = Object.assign(queries, utils.compileObj(insertList));
+        collection.insertOne(queries, function(err, docs){
+            if(err || !docs) {
+                callback({errors: [utils.error(err.message.split(':')[0], 'apiDatabaseException', 'inserOne')]});
+                return;
+            }
+
+            callback(docs);
+        });
     }
 
     /**

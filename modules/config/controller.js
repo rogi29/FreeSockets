@@ -13,12 +13,11 @@ var URL = require('url');
  * @returns {Controller}
  * @constructor
  */
-var Controller = function(router, model) {
-    this.router = router;
-    this.model = model;
+var Controller = function(model) {
+    this.model  = model;
 
     if(!(this instanceof Controller)){
-        return new Controller(router, model);
+        return new Controller(model);
     }
 
     return this;
@@ -30,12 +29,16 @@ var Controller = function(router, model) {
  */
 Controller.prototype = {
     /**
+     * Get function
      *
+     * @param url
+     * @param modelPath
      * @returns {*}
      */
-    getRouter: function()
+    auth: function(path)
     {
-      return this.router;
+        var model = this.model.use(path, {});
+        return model.authenticate;
     },
 
     /**
@@ -45,19 +48,38 @@ Controller.prototype = {
      * @param modelPath
      * @returns {*}
      */
-    get: function(url, modelPath)
+    get: function(path)
     {
-        return this.router.get(url, function(req, res, next) {
-            var fields = URL.parse(req.url, true),
-                model = this.model.use(modelPath, req.params, fields.query);
+        return function(req, res) {
+            req['fields'] = URL.parse(req.url, true).query;
+            var model = this.model.use(path, req);
 
-            model.find(function(data, db){
+            model.find(function(data) {
                 data = JSON.stringify(data, null, 3);
+                res.setHeader('Content-Type', 'application/json');
+                res.send(data);
+            });
+        };
+    },
 
+    /**
+     *
+     * @param url
+     * @param modelPath
+     * @returns {*}
+     */
+    post: function(path)
+    {
+        return function(req, res) {
+            req['fields'] = URL.parse(req.url, true).query;
+            var model = this.model.use(path, req);
+
+            model.insert(function(data){
+                data = JSON.stringify(data, null, 3);
                 res.setHeader('Content-Type', 'application/json');
                 res.send(data);
             })
-        });
+        };
     },
 
     /**
@@ -66,40 +88,18 @@ Controller.prototype = {
      * @param modelPath
      * @returns {*}
      */
-    post: function(url, modelPath)
+    put: function(path)
     {
-        return this.router.get(url, function(req, res, next) {
-            var fields = URL.parse(req.url, true),
-                model = this.model.use(modelPath, req.params, fields.query);
+        return function(req, res) {
+            req['fields'] = URL.parse(req.url, true).query;
+            var model = this.model.use(path, req);
 
-            model.insert(function(data) {
+            model.update(function(data){
                 data = JSON.stringify(data, null, 3);
-
                 res.setHeader('Content-Type', 'application/json');
                 res.send(data);
-            });
-        });
-    },
-
-    /**
-     *
-     * @param url
-     * @param modelPath
-     * @returns {*}
-     */
-    put: function(url, modelPath)
-    {
-        return this.router.get(url, function(req, res, next) {
-            var fields = URL.parse(req.url, true),
-                model = this.model.use(modelPath, req.params, fields.query);
-
-            model.update(function(data) {
-                data = JSON.stringify(data, null, 3);
-
-                res.setHeader('Content-Type', 'application/json');
-                res.send(data);
-            });
-        });
+            })
+        };
     },
 
     /**
@@ -108,19 +108,18 @@ Controller.prototype = {
      * @param modelPath
      * @returns {*|OrderedBulkOperation}
      */
-    delete: function(url, modelPath)
+    delete: function(path)
     {
-        return this.router.get(url, function(req, res, next) {
-            var fields = URL.parse(req.url, true),
-                model = this.model.use(modelPath, req.params, fields.query);//model
+        return function(req, res) {
+            req['fields'] = URL.parse(req.url, true).query;
+            var model = this.model.use(path, req);
 
-            model.remove(function(data) {
+            model.remove(function(data){
                 data = JSON.stringify(data, null, 3);
-
                 res.setHeader('Content-Type', 'application/json');
-                res.send(data);//view
-            });
-        });
+                res.send(data);
+            })
+        };
     }
 };
 

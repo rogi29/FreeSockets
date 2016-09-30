@@ -5,7 +5,7 @@
  * @param app
  * @param routes
  */
-module.exports = function (errorHandler, app, routes) {
+module.exports = function (errorHandler, app, sockets, routes) {
     /**
      * Route key/value to string
      */
@@ -19,11 +19,13 @@ module.exports = function (errorHandler, app, routes) {
      */
     for(var url in routes) {
         var realURL = url.replace('*', '');
-        app.use(realURL, require(routes[url]));
+        app.get(realURL, require(routes[url])(app, sockets));
     }
 
     /**
      * 404 error handler
      */
     app.use(errorHandler.notFoundError(routes, '404'));
+
+    return app;
 };

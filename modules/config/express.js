@@ -19,7 +19,8 @@ module.exports = function (errorHandler, config) {
         app             = express(),
         path            = require('path'),
         bodyParser      = require('body-parser'),
-        mustache        = require('mustache-express');
+        mustache        = require('mustache-express'),
+        cookie          = require('cookie-parser');
 
     /**
      * Set
@@ -38,8 +39,9 @@ module.exports = function (errorHandler, config) {
     } else {
         app.use(errorHandler.userError());
     }
+
     app.use(bodyParser.urlencoded({extended: true}));
-    app.use(express.static(path.join('./', 'public')));
+    app.use(cookie());
 
     /**
      * return app object

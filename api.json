@@ -1,19 +1,104 @@
 {
-    "$users": {
+    "url": "http://localhost/api",
+
+    "$auth": {
         "queries": {
-            "_id": 1,
-            "fullname": 1,
-            "email": 1,
-            "password": 1,
-            "profile_picture": 1,
-            "status": 1,
-            "date": 1
+            "email": {
+                "type": "email",
+                "len": {
+                    "max": 255,
+                    "min": 3
+                }
+            },
+
+            "password": {
+                "type": "string",
+                "len": {
+                    "max": 28,
+                    "min": 4
+                },
+                "encryption": "bcrypt",
+                "escape": true
+            }
         },
 
         "get": {
             "params": {
-                "me": "Sesssion:ObjectID",
-                "_ID": "Params:ObjectID",
+                "_token": "$Params:_token"
+            },
+
+            "fields": {
+                "_id": 1
+            }
+        }
+    },
+
+    "$users": {
+        "queries": {
+            "_id": {
+                "type": "hex",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                },
+                "ObjectID": true
+            },
+
+            "fullname": {
+                "type": "alphaSpace",
+                "len":  {
+                    "max": 70,
+                    "min": 3
+                }
+            },
+
+            "email": {
+                "type": "email",
+                "len": {
+                    "max": 255,
+                    "min": 3
+                }
+            },
+
+            "password": {
+                "type": "string",
+                "len": {
+                    "max": 28,
+                    "min": 4
+                },
+                "encryption": "bcrypt",
+                "escape": true
+            },
+
+            "profile_picture": {
+                "type": "file",
+                "len": {
+                    "max": 255,
+                    "min": 5
+                }
+            },
+
+            "status": {
+                "type": "int",
+                "len": {
+                    "max": 1,
+                    "min": 1
+                }
+            },
+
+            "date": {
+                "type": "date",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                }
+            }
+        },
+
+        "get": {
+            "params": {
+                "me": "$Session:_ID",
+                "_ID": "$Params:_ID",
                 "public": null
             },
 
@@ -28,21 +113,328 @@
         },
 
         "post": {
-            "insert": {
-                "profile_picture": "",
-                "data": "Params:Date",
-                "satus": 0
-            },
-
             "params": {
-                "json": "$insert",
-                "params": "object"
+                "json": "$Fields:insert",
+                "fields": null
             },
 
             "fields": {
                 "fullname": 1,
                 "email": 1,
                 "password": 1
+            },
+
+            "autoInsert": {
+                "profile_picture": null,
+                "date": "$Object:Date",
+                "status": 0
+            }
+        },
+
+        "put": {
+            "params": {
+                "json": "$Fields:update",
+                "fields": null
+            },
+
+            "fields": {
+                "fullname": 1,
+                "email": 1,
+                "password": 1,
+                "profile_picture": 1,
+                "status": 1
+            }
+        },
+
+        "delete": {
+            "params": {
+                "json": "$Fields:delete",
+                "fields": null
+            },
+
+            "fields": {
+                "_id": 1
+            }
+        }
+    },
+
+    "$contacts": {
+        "queries": {
+            "_id": {
+                "type": "hex",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                },
+                "ObjectID": true
+            },
+
+            "userid": {
+                "type": "hex",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                }
+            },
+
+            "contactid":{
+                "type": "hex",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                }
+            },
+
+            "auth": {
+                "type": "bool",
+                "len": {
+                    "max": 1,
+                    "min": 1
+                }
+            },
+
+            "auth_date": {
+                "type": "date",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                }
+            },
+
+            "date": {
+                "type": "date",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                }
+            }
+        },
+
+        "get": {
+            "params": {
+                "me": "$Session:_ID",
+                "_ID": "$Params:_ID",
+                "public": null
+            },
+
+            "fields": {
+                "_id": 1,
+                "userid": 1,
+                "contactid": 1,
+                "auth": 1,
+                "auth_date": 1,
+                "date": 1
+            }
+        },
+
+        "post": {
+            "params": {
+                "json": "$Fields:insert",
+                "fields": null
+            },
+
+            "fields": {
+                "contactid": 1
+            },
+
+            "autoInsert": {
+                "userid": "$Session:_ID",
+                "auth": false,
+                "auth_date": null,
+                "date": "$Object:Date"
+            }
+        }
+    },
+
+    "$chats": {
+        "queries": {
+            "_id": {
+                "type": "hex",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                },
+                "ObjectID": true
+            },
+
+            "title": {
+                "type": "string",
+                "len": {
+                    "max": 255,
+                    "min": 3
+                }
+            },
+
+            "adminid": {
+                "type": "hex",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                }
+            },
+
+            "members": {
+                "type": "object"
+            },
+
+            "date": {
+                "type": "date",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                }
+            }
+        },
+
+        "get": {
+            "params": {
+                "me": "$Session:_ID"
+            },
+
+            "fields": {
+                "_id": 1,
+                "title": 1,
+                "adminid": 1,
+                "members": 1,
+                "date": 1
+            }
+        },
+
+        "post": {
+            "params": {
+                "json": "$Fields:insert",
+                "fields": null
+            },
+
+            "fields": {
+                "title": 1,
+                "members": 1
+            },
+
+            "autoInsert": {
+                "adminid": "$Session:_ID",
+                "date": "$Object:Date"
+            }
+        }
+    },
+
+    "$messages": {
+        "queries": {
+            "_id": {
+                "type": "hex",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                },
+                "ObjectID": true
+            },
+
+            "chatid": {
+                "type": "hex",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                }
+            },
+
+            "userid": {
+                "type": "hex",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                }
+            },
+
+            "body": {
+                "type": "string",
+                "len": {
+                    "max": 255,
+                    "min": 1
+                },
+                "escape": true
+            },
+
+            "edited": {
+                "type": "int",
+                "len": {
+                    "max": 3,
+                    "min": 1
+                }
+            },
+
+            "deleted": {
+                "type": "bool",
+                "len": {
+                    "max": 1,
+                    "min": 1
+                }
+            },
+
+            "date": {
+                "type": "date",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                }
+            },
+
+            "edited_date": {
+                "type": "date",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                }
+            },
+
+            "deleted_date": {
+                "type": "date",
+                "len": {
+                    "max": 24,
+                    "min": 24
+                }
+            }
+        },
+
+        "get": {
+            "params": {
+                "me": "$Session:_ID"
+            },
+
+            "second_params": {
+                "_chatID": "$Params:_chatID"
+            },
+
+            "fields": {
+                "_id": 1,
+                "chatid": 1,
+                "userid": 1,
+                "body": 1,
+                "edited": 1,
+                "deleted": 1,
+                "date": 1,
+                "edited_date": 1,
+                "deleted_date": 1
+            }
+        },
+
+        "post": {
+            "params": {
+                "json": "$Fields:insert",
+                "fields": null
+            },
+
+            "fields": {
+                "chatid": 1,
+                "body": 1
+            },
+
+            "autoInsert": {
+                "userid": "$Session:_ID",
+                "edited": 0,
+                "deleted": 0,
+                "date": "$Object:Date",
+                "edited_date": null,
+                "deleted_date": null
             }
         }
     }

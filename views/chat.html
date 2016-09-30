@@ -3,7 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{head.title}}</title>
+    <title>{{head.title}} {{title}}</title>
     <link rel="shortcut icon" href="images/favicon.ico">
     <link class="cssfx" rel="stylesheet" href="css/style.css?v=0.02">
     <link class="cssfx" rel="stylesheet" href="css/perfect-scrollbar.min.css">
@@ -40,7 +40,7 @@
                             </div>
                             <figcaption>George Qubty, Roni Nimer</figcaption>
                             <div class="convo-info">
-                                <span class="convo-name">George Qubty, Roni Nimer</span>
+                                <h2 class="convo-name">George Qubty, Roni Nimer</h2>
                                 <span class="recent-message">George: hello there how are you?</span>
                                 <span class="recent-time">
                                   <time>today</time>
@@ -58,7 +58,7 @@
                             </div>
                             <figcaption>George Qubty</figcaption>
                             <div class="convo-info">
-                                <span class="convo-name">George Qubty</span>
+                                <h2 class="convo-name">George Qubty</h2>
                                 <span class="recent-message">Hey bro!</span>
                                 <span class="recent-time">
                                   <time>today</time>
@@ -76,7 +76,7 @@
                             </div>
                             <figcaption>Roni Nimer</figcaption>
                             <div class="convo-info">
-                                <span class="convo-name">Roni Nimer</span>
+                                <h2 class="convo-name">Roni Nimer</h2>
                                 <span class="recent-message">empty</span>
                                 <span class="recent-time">
                                   <time>today</time>
@@ -94,7 +94,7 @@
             <nav class="chat-controls">
                 <a href="#refresh" title="Users" area-label="Users" class="control left"><i class="fa fa-user" aria-hidden="true"></i></a>
                 <div class="chat-title">
-                    <span title="Qeorge Qubty, Roni Nimer" class="name">George Qubty, Roni Nimer</span>
+                    <h1 title="{{title}}" class="name"> {{title}}</h1>
                     <span title="Active" class="status">Active</span>
                 </div>
                 <a href="#settings" title="Settings" area-label="Settings" class="control right"><i class="fa fa-cog" aria-hidden="true"></i></a>
@@ -203,10 +203,13 @@
         socket.emit('signout', []);
     });
 
-    socket.on('signout_respond', function(data) {
-        if(data === true) {
-            window.location = '';
-        }
+    $r('#message-submit').on('click', function() {
+        this.event.preventDefault();
+        socket.emit('chat message send', {message: $r('#message-input').el.value});
+    });
+
+    socket.on('chat message receive', function(data){
+        alert(data.from + ': ' + data.message);
     });
 </script>
 </body>

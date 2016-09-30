@@ -21,13 +21,15 @@ var Mongo = function(url) {
 };
 
 /**
- * MySql Methods
+ * MongoDB Methods
  *
  * @type {{connect: Function, disconnect: Function}}
  */
 Mongo.prototype = {
     /**
+     * Connect to DB
      *
+     * @param callback
      */
     connect: function (callback)
     {

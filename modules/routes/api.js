@@ -1,22 +1,25 @@
+module.exports = function(app) {
 
-var fs      = require('fs'),
-    config  = JSON.parse(fs.readFileSync('./config.json', 'utf8')),
-    express = require('express'),
-    router  = express.Router(),
-    redis   = require('redis').createClient(config['redis']['port'], config['redis']['host']),
-    mongo   = require('../config/mongodb.js')(config['mongodb']);
-
-router.get('/', function (req, res) {
-    res.render('api',{
-        head: {
-            title: 'FreeSockets - api'
-        },
-        json: 'FreeSockets API'
+    app.use('/', function(req, res, next) {
+        if(!('_ID' in req.session)) {
+            req.session.destroy();
+        }
+        next();
     });
-});
 
-mongo.connect(function(error, db) {
-    router.use(require('./api/users.js')(db, redis));
-});
+    app.get('/api', function(req, res, next) {
+        res.render('api',{
+            head: {
+                title: 'FreeSockets - api'
+            },
+            json: 'FreeSockets API'
+        });
+    });
 
-module.exports = router;
+    app = require('./api/users.js')(app);
+    app = require('./api/contacts.js')(app);
+    app = require('./api/chats.js')(app);
+    app = require('./api/messages.js')(app);
+
+    return app;
+};

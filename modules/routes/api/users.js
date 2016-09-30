@@ -1,16 +1,11 @@
+module.exports = function(app) {
+    var model       = require('../../config/model.js')(),
+        controller  = require('../../config/controller.js')(model);
 
-var
-    express     = require('express'),
-    router      = express.Router();
+    app.get('/api/authenticate/:_token', controller.get('../models/api/auth.js'));
+    app.get('/api/POST/:_method', controller.post('../models/api/users.js'));
+    app.use('/api/*', controller.auth('../models/api/auth.js'));
+    app.get('/api/GET/:_ID', controller.get('../models/api/users.js'));
 
-module.exports = function(db, redis) {
-    var
-        model       = require('../../config/model.js')(db, redis),
-        controller  = require('../../config/controller.js')(router, model);
-
-    controller.get('/GET/user/:_ID', '../models/api/users.js');
-    controller.post('/POST/user/:_method', '../models/api/users.js');
-    controller.put('/PUT/user/:_method', '../models/api/users.js');
-
-    return controller.getRouter();
+    return app;
 };

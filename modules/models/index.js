@@ -5,15 +5,13 @@ var request = require("request");
  * @param mysql
  * @returns {Function}
  */
-module.exports = function(app, socket) {
-    console.log('Sockets connecteion established');
+module.exports = function(socket, req) {
+    console.log('sockets connection established');
+    var session = socket.request.session, respond;
 
-    /**
-     *
-     */
     socket.on('authentication', function(data) {
         request({
-            url: ('http://localhost/api/GET/user/public?email=' + data.email + '&password=' + data.password),
+            url: (req.api.url + '/authenticate/token?email=' + data.email + '&password=' + data.password),
             json: true
         },  function (error, response, body) {
             if (error && response.statusCode !== 200) {
@@ -21,28 +19,25 @@ module.exports = function(app, socket) {
                 return;
             }
 
-            if(JSON.stringify(body) === JSON.stringify([])) {
-                request({
-                    url: ('http://localhost/api/GET/user/public?email=' + data.email),
-                    json: true
-                },  function (error, response, body) {
-                    if (error && response.statusCode !== 200) {
-                        console.log('error');
-                        return;
-                    }
+            respond = ('errors' in body) ? body.errors[0]['type']: false;
+            switch(respond)
+            {
+                case 'apiNoMatch':
+                    socket.emit('signin_errors', body.errors);
+                    socket.emit('new_user', true);
+                    break;
 
-                    if(JSON.stringify(body) === JSON.stringify([])) {
-                        socket.emit('signin_errors', [{type: 'data_not_found', message: 'User not found, would you like to sign up?'}]);
-                        socket.emit('new_user', data);
-                    } else {
-                        socket.emit('signin_errors', [
-                            {type: 'data_no_match', message: 'Password doesn\'t match the email provided!'},
-                            {type: 'data_dulication', message: 'Email address is already in use!'}
-                        ]);
-                    }
-                });
-            } else {
-                socket.emit('authenticated', 'george.qubty&roni.nimer');
+                case false:
+                    session._ID = body._ID;
+                    session.token = body.token;
+                    session.save(function(err){});
+
+                    socket.emit('authenticated', true);
+                    break;
+
+                default:
+                    socket.emit('signin_errors', body.errors);
+                    break;
             }
         });
     });
@@ -52,7 +47,7 @@ module.exports = function(app, socket) {
      */
     socket.on('sign_up_auth', function(data) {
         request({
-            url: ('http://localhost/api/POST/user/json?insert='+JSON.stringify(data)),
+            url: (req.api.url + '/POST/json?insert='+JSON.stringify(data)),
             json: true
         },  function (error, response, body) {
             if (error && response.statusCode !== 200) {
@@ -60,10 +55,38 @@ module.exports = function(app, socket) {
                 return;
             }
 
-            if('error' in body) {
-                console.log(body);
+            if('errors' in body && JSON.stringify(body.errors) != JSON.stringify([])) {
+                socket.emit('signin_errors', body.errors);
             } else if('ok' in body && body.ok == 1) {
-                socket.emit('authenticated', body);
+                session._ID = body._ID;
+                session.token = body.token;
+                session.save(function(err){});
+
+                request({
+                    url: (req.api.url + '/authenticate/token?email=' + data.email + '&password=' + data.password),
+                    json: true
+                },  function (error, response, body) {
+                    if (error && response.statusCode !== 200) {
+                        console.log('error');
+                        return;
+                    }
+
+                    respond = ('errors' in body) ? body.errors[0]['type']: false;
+                    switch(respond)
+                    {
+                        case false:
+                            session._ID = body._ID;
+                            session.token = body.token;
+                            session.save(function(err){});
+
+                            socket.emit('authenticated', true);
+                            break;
+
+                        default:
+                            socket.emit('signin_errors', body.errors);
+                            break;
+                    }
+                });
             }
         });
     });
@@ -71,7 +94,7 @@ module.exports = function(app, socket) {
     /**
      *
      */
-    socket.on('signout', function(data) {
-        socket.emit('signout_respond', true)
+    socket.on('disconnect', function () {
+        console.log('Sockets disconnected');
     });
 };

@@ -142,6 +142,20 @@ if (!Function.prototype.bind) {
     };
 
     /**
+     *
+     */
+    Array.isArray || (Array.isArray = function(
+        a // array or not array, this is the question
+        ){
+
+        return
+        // is not the string '[object Array]' and
+        '' + a !== a &&
+            // test with Object.prototype.toString
+        {}.toString.call(a) == '[object Array]'
+    });
+
+    /**
      * isArray checks if an object is an array type
      *
      * @param obj
@@ -161,7 +175,6 @@ if (!Function.prototype.bind) {
             typeof length === 'number' && length > 0 && (length - 1) in obj;
         }
     };
-
     /**
      * isElement checks if an object is a dom element
      *
@@ -169,7 +182,7 @@ if (!Function.prototype.bind) {
      * @returns {string|SVGAnimatedString|wa.className|*|I.id|T.id}
      */
     var isElement  = function(o){
-        return (o.nodeName || o.tagName || o.className || o.id);
+        return o.nodeName || o.tagName || o.className || o.id;
     };
 
     /**
@@ -297,7 +310,7 @@ if (!Function.prototype.bind) {
         }*/
 
         this.el = (isElement(params) || isArray(params)) ? params : querySelectorAll(params);
-        this.name = params;
+        this.params = params;
         this.isMouseOver = false;
     };
 
@@ -422,13 +435,22 @@ if (!Function.prototype.bind) {
         },
 
         /**
-         * Change/get inner html
+         * Get inner html
+         *
+         * @returns {string|*|Event.draggable.move.innerHTML|innerHTML|S.innerHTML}
+         */
+        html: function() {
+            return this.el.innerHTML;
+        },
+
+        /**
+         * Replace inner html
          *
          * @param content
          * @param action
          * @returns {string|*|innerHTML}
          */
-        html: function(content, action){
+        replace: function(content){
             var obj = this.el;
 
             if(typeof content === "function") {
@@ -436,24 +458,27 @@ if (!Function.prototype.bind) {
                 return obj.innerHTML;
             }
 
-            if(content !== undefined) {
-                switch (action) {
-                    case 'append':
-                        obj.innerHTML += content;
-                        break;
+            return content;
+        },
 
-                    case 'replace':
-                        obj.innerHTML = content;
-                        break;
+        /**
+         * Append inner html
+         *
+         * @param content
+         * @returns {*}
+         */
+        append: function(content)
+        {
+            var obj = this.el;
 
-                    default:
-                        obj.innerHTML = content;
-                        break;
-                }
+            if(typeof content === "function") {
+                obj.innerHTML = content.call(obj);
+                return obj.innerHTML;
             }
 
-            return obj.innerHTML;
+            return (obj.innerHTML + content);
         },
+
 
         /**
          * Change/get css value
@@ -466,38 +491,10 @@ if (!Function.prototype.bind) {
         {
             var obj = this.el;
 
-            if (!(style in document.body.style)) {
-                if ('webkit' + style.ucfirst() in document.body.style) {
-                    style = 'webkit' + style.ucfirst();
-                } else if ('moz' + style.ucfirst() in document.body.style) {
-                    style = 'moz' + style.ucfirst();
-                } else if ('ms' + style.ucfirst() in document.body.style) {
-                    style = 'ms' + style.ucfirst();
-                } else if ('o' + style.ucfirst() in document.body.style) {
-                    style = 'o' + style.ucfirst();
-                } else {
-                    debug(style + ' doesn\'t supported by this browser.');
-                }
-            }
+            if(!value)
+                return obj.style[style];
 
-            if(!value) {
-                if (isArray(obj)) {
-                    return obj[0].style[style];
-                } else {
-                    return obj.style[style];
-                }
-            }
-
-            if (isArray(obj)) {
-                $r(this.name).each(function () {
-                    this.style[style] = value;
-                    return this;
-                });
-            } else {
-                obj.style[style] = value;
-                return this.el;
-            }
-
+            return (obj.style[style] = value);
         },
 
         /**
@@ -557,27 +554,25 @@ if (!Function.prototype.bind) {
         /**
          * Get element offset
          *
-         * @returns {{x: number, y: number}}
+         * @returns {*}
          */
-        position: function (position)
+        position: function ()
         {
-            var box = this.el.getBoundingClientRect(),
-                body = document.body,
+            var box     = this.el.getBoundingClientRect(),
+                body    = document.body,
                 docElem = document.documentElement,
-                scrollTop, scrollLeft, clientTop, clientLeft, x, y, array;
+                scrollTop, scrollLeft, clientTop, clientLeft, x, y;
 
-            scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
-            scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
+            scrollTop   = window.pageYOffset || docElem.scrollTop  || body.scrollTop;
+            scrollLeft  = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
 
-            clientTop = docElem.clientTop || body.clientTop || 0;
-            clientLeft = docElem.clientLeft || body.clientLeft || 0;
+            clientTop   = docElem.clientTop  || body.clientTop  || 0;
+            clientLeft  = docElem.clientLeft || body.clientLeft || 0;
 
             x = box.left + scrollLeft - clientLeft;
             y = box.top + scrollTop - clientTop;
-            array = {x: Math.round(x),  y: Math.round(y)};
 
-
-            return (position) ? array[position] : array;
+            return {x: Math.round(x),  y: Math.round(y)};
         },
 
         /**
@@ -586,13 +581,12 @@ if (!Function.prototype.bind) {
          * @param size
          * @returns {*}
          */
-        size: function (size)
+        size: function ()
         {
             var width = parseInt(this.css('width')) || this.el.offsetWidth || 0,
-                height = parseInt(this.css('height')) || this.el.offsetHeight || 0,
-                array = {width: width, height: height};
+                height = parseInt(this.css('height')) || this.el.offsetHeight || 0;
 
-            return size ? array[size] : array;
+            return {width: width, height: height};
         },
 
         /**
@@ -600,13 +594,7 @@ if (!Function.prototype.bind) {
          */
         hide: function()
         {
-            if(isArray(this.el)){
-                $r(this.name).each(function(){
-                    this.style.display = 'none';
-                });
-            } else {
-                this.el.style.display = 'none';
-            }
+            this.el.style.display = 'none';
         },
 
         /**
@@ -614,33 +602,27 @@ if (!Function.prototype.bind) {
          */
         show: function()
         {
-            if(isArray(this.el)){
-                $r(this.name).each(function(){
-                    this.style.display = 'inherit';
-                });
-            } else {
-                this.el.style.display = 'inherit';
-            }
+            this.el.style.display = 'inherit';
         },
 
         /**
+         *  Check if array
          *
          * @returns {boolean}
          */
         isArray: function() {
             var obj = this.el;
-            if(obj.constructor) {
-                return (obj.constructor === Array) || (obj.constructor === NodeList);
-            } else {
-                var length = "length" in Object(obj) && obj.length;
+            return (obj.constructor === Array) || (obj.constructor === NodeList);
 
-                if (obj.nodeType === NODE_TYPE_ELEMENT && length) {
-                    return true;
-                }
+            var length = "length" in Object(obj) && obj.length;
 
-                return isString(obj) || isArray(obj) || length === 0 ||
-                typeof length === 'number' && length > 0 && (length - 1) in obj;
+            if (obj.nodeType === NODE_TYPE_ELEMENT && length) {
+                return true;
             }
+
+            return isString(obj) || isArray(obj) || length === 0 ||
+            typeof length === 'number' && length > 0 && (length - 1) in obj;
+
         }
     };
 
@@ -652,12 +634,13 @@ if (!Function.prototype.bind) {
      * @returns {*}
      */
     $r.prototype.extend = function (source, destination) {
-        source = source.prototype;
+        var attrname;
+        source      = source.prototype;
         destination = (destination) ? destination.prototype : $r.prototype;
 
-        for (var attrname in source) {
-            if(!destination[attrname])
-                destination[attrname] = source[attrname];
+        for (attrname in source) {
+            //if(!destination[attrname])
+            destination[attrname] = source[attrname];
         }
         return destination;
     };

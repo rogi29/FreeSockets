@@ -4,25 +4,41 @@
  * @param app
  * @returns {*|exports}
  */
-var Sockets = function(app) {
-    if(!(this instanceof Sockets)){
-        return new Sockets(app);
-    }
+var Sockets = function(app, session) {
+    this.http   = require('http').Server(app);
+    this.io     = require('socket.io')(this.http);
+    this.io.set('authorization', function(handshake, accept) {
+        session(handshake, {}, function (err) {
+            if (err) return accept(err)
+            var session = handshake.session;
+            // check the session is valid
+            accept(null, session)
+        })
+    });
 
-    this.app = app;
-    this.http = require('http').Server(app);
-    this.io = require('socket.io')(this.http);
+    if(!(this instanceof Sockets)){
+        return new Sockets(app, session);
+    }
 
     return this;
 };
 
+/**
+ *
+ * @type {{use: Function}}
+ */
 Sockets.prototype = {
-    use: function(path){
-        return this.io.use(function(socket, next){
-            require('../.' + path)(this.app, socket);
 
-            if (socket.request.headers.cookie) return next();
-            next(new Error('Authentication error'));
+    /**
+     *
+     * @param path
+     * @returns {*}
+     */
+    use: function(path, req){
+        this.io.on('connection', function(socket) {
+            console.log(socket.id);
+
+            require('../.' + path)(socket, req);
         });
     }
 };

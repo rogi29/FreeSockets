@@ -3,16 +3,16 @@ var express     = require('express'),
     request     = require("request");
 
 module.exports = function(app, sockets) {
-    app.use('/chat', express.static(path.join('./', 'public')));
+    app.use('/me', express.static(path.join('./', 'public')));
 
-    app.get('/chat/:_chatID', function(req, res, next) {
-        var title = null;
+    app.get('/me', function(req, res, next) {
         if(!('_ID' in req.session)){
             res.redirect('http://localhost/');
             return;
         }
+
         request({
-            url: (req.api.url + '/GET/me/chats?get_fields=title&_id=' + req.params._chatID),
+            url: (req.api.url + '/GET/me'),
             headers: {"x-access-token": req.session.token},
             json: true
         },  function (error, response, body) {
@@ -21,7 +21,7 @@ module.exports = function(app, sockets) {
                 return;
             }
 
-            if (JSON.stringify(body) === JSON.stringify([]) ||  'errors' in body) {
+            if (JSON.stringify(body) === JSON.stringify([])) {
                 res.render('404', {
                     head: {
                         title: 'FreeSockets - 404'
@@ -30,14 +30,12 @@ module.exports = function(app, sockets) {
                 return;
             }
 
-            res.render('chat', {
-                title: body[0].title,
+
+            res.render('chat',{
                 head: {
-                    title: 'FreeSockets - '
+                    title: body[0].fullname
                 }
             });
-
-            sockets.use('./modules/models/chat.js', req);
         });
     });
 

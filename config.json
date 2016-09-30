@@ -2,12 +2,14 @@
     "express": {
         "env": "development",
         "port": 80,
-        "views": "views"
+        "views": "views",
+        "secret": "1fr1ee1so2ck9et4sforever"
     },
 
     "routes": {
         "/"         : "../routes/index.js",
         "/chat/*"   : "../routes/chat.js",
+        "/me"       : "../routes/me.js",
         "/api/*"    : "../routes/api.js"
     },
 
